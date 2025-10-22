@@ -4,15 +4,14 @@ import cn.hutool.core.bean.BeanUtil;
 import com.nageoffer.shortlink.admin.common.convention.result.Result;
 import com.nageoffer.shortlink.admin.common.convention.result.Results;
 import com.nageoffer.shortlink.admin.common.enums.UserErrorCodeEnum;
+import com.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.nageoffer.shortlink.admin.dto.resp.UserActualRespDTO;
 import com.nageoffer.shortlink.admin.dto.resp.UserRespDTO;
 import com.nageoffer.shortlink.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,13 +23,32 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/api/shortlink/v1/user/{username}")
+    @GetMapping("/api/short-link/v1/user/{username}")
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
         return Results.success(userService.getUserByUserName(username));
     }
 
-    @GetMapping("/api/shortlink/v1/actual/user/{username}")
+    @GetMapping("/api/short-link/v1/actual/user/{username}")
     public Result<UserActualRespDTO> getActualUserByUsername(@PathVariable("username") String username) {
         return Results.success(BeanUtil.toBean(userService.getUserByUserName(username), UserActualRespDTO.class));
+    }
+
+    /**
+     * 查询用户名是否存在，有误报，因为布隆过滤器
+     */
+    @GetMapping("/api/short-link/v1/user/has-username")
+    public Result<Boolean> hasUsername(@RequestParam("username") String username) {
+        return Results.success(userService.hasUsername(username));
+    }
+
+    /**
+     * 注册用户
+     * @param registerParam
+     * @return
+     */
+    @PostMapping("/api/short-link/v1/user")
+    public Result<Void> register(@RequestBody UserRegisterReqDTO registerParam){
+        userService.register(registerParam);
+        return Results.success();
     }
 }

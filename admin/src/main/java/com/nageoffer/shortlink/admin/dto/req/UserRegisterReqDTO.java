@@ -1,16 +1,11 @@
-package com.nageoffer.shortlink.admin.dao.entity;
+package com.nageoffer.shortlink.admin.dto.req;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 
 @Data
-@TableName("t_user")
-public class UserDO {
+public class UserRegisterReqDTO {
     /**
      * ID
      */
@@ -31,10 +26,6 @@ public class UserDO {
      */
     private String realName;
 
-    /**
-     * 手机号
-     */
-    private String phone;
 
     /**
      * 邮箱
@@ -49,18 +40,15 @@ public class UserDO {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /**
      * 删除标识 0：未删除 1：已删除
      */
-    @TableField(fill = FieldFill.INSERT)
     private Integer delFlag;
 }
