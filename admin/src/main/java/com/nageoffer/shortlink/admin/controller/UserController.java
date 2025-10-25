@@ -4,8 +4,11 @@ import cn.hutool.core.bean.BeanUtil;
 import com.nageoffer.shortlink.admin.common.convention.result.Result;
 import com.nageoffer.shortlink.admin.common.convention.result.Results;
 import com.nageoffer.shortlink.admin.common.enums.UserErrorCodeEnum;
+import com.nageoffer.shortlink.admin.dto.req.UserLoginReqDTO;
 import com.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
+import com.nageoffer.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.nageoffer.shortlink.admin.dto.resp.UserActualRespDTO;
+import com.nageoffer.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.nageoffer.shortlink.admin.dto.resp.UserRespDTO;
 import com.nageoffer.shortlink.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +53,32 @@ public class UserController {
     public Result<Void> register(@RequestBody UserRegisterReqDTO registerParam){
         userService.register(registerParam);
         return Results.success();
+    }
+
+    /**
+     * 修改用户
+     * @param updateReqDTO
+     * @return
+     */
+    @PutMapping("/api/short-link/v1/user")
+    public Result<Void> update(@RequestBody UserUpdateReqDTO updateReqDTO) {
+        userService.update(updateReqDTO);
+        return Results.success();
+    }
+
+    /**
+     * 用户登录
+     * @param requestParm 用户登录请求参数
+     * @return 用户登录返回参数 Token
+     */
+    @PostMapping("/api/short-link/v1/user/login")
+    public Result<UserLoginRespDTO> login(@RequestBody UserLoginReqDTO requestParm) {
+        UserLoginRespDTO result = userService.login(requestParm);
+        return Results.success(result);
+    }
+
+    @GetMapping("/api/short-link/v1/user/check-login")
+    public Result<Boolean> checkLogin(@RequestParam("username") String username, @RequestParam("token") String token) {
+        return Results.success(userService.checkLogin(username, token));
     }
 }
